@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>镜面</title>
+    <link rel="icon" href="/static/logo.ico">
+    <link rel="stylesheet" href="/static/css/style.css?v=20260507d">
+</head>
+<body>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app">
+        <!-- Login Page -->
+        <div id="login-page" class="page active">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1 class="login-title">镜面</h1>
+                    <p class="login-subtitle">登录后开始与大师对话</p>
+                </div>
+                <div class="login-tabs">
+                    <button class="login-tab active" data-login-tab="account">账号登录</button>
+                    <button class="login-tab" data-login-tab="sso">单点登录</button>
+                </div>
+                <div id="login-account-panel" class="login-panel">
+                    <form id="login-form" class="login-form">
+                        <div class="field">
+                            <label>用户名</label>
+                            <input type="text" id="login-username" placeholder="输入用户名" autocomplete="username">
+                        </div>
+                        <div class="field">
+                            <label>密码</label>
+                            <input type="password" id="login-password" placeholder="输入密码" autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="btn-save">登录</button>
+                    </form>
+                    <p class="login-switch">没有账号？<a href="#" id="show-register">注册一个</a></p>
+                </div>
+                <div id="login-sso-panel" class="login-panel" style="display:none;">
+                    <button id="sso-login-btn" class="btn-save sso-btn">通过工作台登录</button>
+                    <p class="login-sso-hint">跳转到工作台完成身份验证后自动返回</p>
+                </div>
+                <div id="login-error" class="login-error" style="display:none;"></div>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div id="register-modal" class="modal-overlay">
+            <div class="modal-panel">
+                <div class="modal-top">
+                    <h3>注册账号</h3>
+                    <button class="modal-close" id="close-register">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <form id="register-form" class="modal-form">
+                    <div class="field">
+                        <label>用户名</label>
+                        <input type="text" id="register-username" placeholder="2-32 个字符" autocomplete="username">
+                    </div>
+                    <div class="field">
+                        <label>密码</label>
+                        <input type="password" id="register-password" placeholder="至少 4 个字符" autocomplete="new-password">
+                    </div>
+                    <div class="field">
+                        <label>确认密码</label>
+                        <input type="password" id="register-password2" placeholder="再输一次" autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn-save">注册</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="character-selection" class="page">
+            <header class="hero">
+                <h1 class="hero-title">与大师对话</h1>
+                <p class="hero-subtitle">选择一位人物，开启深度思维碰撞</p>
+                <div class="hero-actions">
+                    <button id="distill-btn" class="hero-btn hero-btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        蒸馏人物
+                    </button>
+                    <button id="hall-btn" class="hero-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        进入圆桌
+                    </button>
+                    <button id="debate-btn" class="hero-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M7 16v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1"/><path d="M18 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path d="M12 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+                        辩论模式
+                    </button>
+                    <button id="history-btn" class="hero-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        历史对话
+                    </button>
+                    <button id="settings-btn" class="hero-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        接口配置
+                    </button>
+                    <button id="admin-btn" class="hero-btn" style="display:none">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        管理
+                    </button>
+                    <button id="logout-btn" class="hero-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <span id="user-display-name">登出</span>
+                    </button>
+                </div>
+            </header>
+            <div id="characters-grid" class="card-grid"></div>
+            <footer class="home-footer">
+                <p class="footer-disclaimer">本应用中的人物对话由 AI 生成，仅用于思维探索与学习交流，不代表真实人物观点。</p>
+                <a class="footer-about" href="#" target="_self" rel="noopener noreferrer">关于作者</a>
+            </footer>
+        </div>
+
+        <div id="chat-page" class="page">
+            <div class="chat-topbar">
+                <button id="back-btn" class="back-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    返回
+                </button>
+                <div class="chat-char-info">
+                    <div class="chat-avatar" id="chat-avatar">?</div>
+                    <div>
+                        <h2 id="current-character-name"></h2>
+                        <p id="current-character-desc"></p>
+                    </div>
+                </div>
+                <button id="chat-history-btn" class="hero-btn" title="历史对话">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </button>
+                <button id="chat-settings-btn" class="hero-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </button>
+            </div>
+
+            <div id="char-intro-card" class="char-intro-card" style="display:none;">
+                <div class="char-intro-header" id="char-intro-toggle">
+                    <span class="char-intro-title" id="char-intro-name"></span>
+                    <span class="char-intro-arrow" id="char-intro-arrow">收起 ▼</span>
+                </div>
+                <div class="char-intro-body" id="char-intro-body">
+                    <p id="char-intro-desc"></p>
+                </div>
+            </div>
+
+            <div id="chat-messages" class="chat-messages"></div>
+
+            <div class="chat-input-wrap">
+                <div class="chat-input-box">
+                    <textarea id="chat-input" placeholder="输入你的问题..." rows="1"></textarea>
+                    <button id="send-btn" class="send-btn" aria-label="发送">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="hall-page" class="page">
+            <div class="rt-select">
+                <div class="rt-select-header">
+                    <div class="rt-mode-pills" id="hall-mode-tabs">
+                        <button id="hall-mode-roundtable" class="rt-mode-pill active">圆桌</button>
+                        <button id="hall-mode-debate" class="rt-mode-pill">辩论</button>
+                    </div>
+                    <h1 class="rt-select-title" id="hall-page-title">选择入席角色</h1>
+                    <p class="rt-select-sub" id="hall-page-subtitle">选择 2-6 位人物，开启圆桌问答</p>
+                    <div class="rt-select-badge" id="hall-mode-badge">圆桌模式</div>
+                    <p class="rt-counter" id="hall-counter">已选 0 / 6 位</p>
+                </div>
+                <div id="hall-characters-grid" class="rt-grid"></div>
+                <div class="rt-select-actions">
+                    <button id="hall-back-btn" class="rt-btn-ghost">取消</button>
+                    <button id="hall-confirm-btn" class="rt-btn-primary" disabled>确认开始</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="hall-chat-page" class="page">
+            <div class="rt-stage">
+                <nav class="rt-nav">
+                    <button id="hall-chat-back" class="rt-nav-back">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        <span>返回</span>
+                    </button>
+                    <div class="rt-nav-center">
+                        <div class="rt-nav-badge" id="hall-stage-badge">圆桌</div>
+                        <span class="rt-nav-title" id="hall-chat-title">圆桌讨论</span>
+                        <div class="debate-stage-indicator" id="debate-stage-indicator" style="display:none;">
+                            <div class="debate-stage-step" data-stage="opening">开篇立论</div>
+                            <div class="debate-stage-arrow">&#8250;</div>
+                            <div class="debate-stage-step" data-stage="rebuttal">驳立论</div>
+                            <div class="debate-stage-arrow">&#8250;</div>
+                            <div class="debate-stage-step" data-stage="free">自由辩论</div>
+                            <div class="debate-stage-arrow">&#8250;</div>
+                            <div class="debate-stage-step" data-stage="closing">总结陈词</div>
+                        </div>
+                    </div>
+                    <button id="hall-chat-settings" class="rt-nav-action">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </button>
+                </nav>
+
+                <div class="rt-body">
+                    <div class="rt-sidebar">
+                        <div class="rt-focus-card">
+                            <div class="rt-focus-label" id="hall-question-label">当前焦点</div>
+                            <div class="rt-focus-text" id="hall-current-question">还没开始，先抛出一个真正值得讨论的问题。</div>
+                        </div>
+                        <div class="rt-seats-card">
+                            <div class="rt-card-head">
+                                <span class="rt-card-title">与会角色</span>
+                            </div>
+                            <div id="hall-participants" class="rt-seats"></div>
+                        </div>
+                    </div>
+
+                    <div class="rt-main">
+                        <div class="rt-main-head">
+                            <span class="rt-card-title">会议回合</span>
+                            <span class="rt-main-sub" id="hall-stage-description">把问题抛进会场，让多位 AI 在同一轮里给出完整、可对照的回答。</span>
+                        </div>
+                        <div id="hall-rounds" class="rt-rounds">
+                            <div class="rt-empty">
+                                <div class="rt-empty-tag">准备就绪</div>
+                                <p>会场已经准备好，发出第一个问题之后，这里会按回合展开所有回答。</p>
+                            </div>
+                        </div>
+                        <div class="hall-input-area">
+                            <div class="hall-input-header">
+                                <span class="rt-card-title" id="hall-compose-title">向圆桌发问</span>
+                                <span class="rt-ask-hint" id="hall-compose-hint">每一轮只问一件事，让答案更集中。</span>
+                            </div>
+                            <div class="hall-input-box">
+                                <textarea id="hall-input" placeholder="输入一个问题、判断或假设..." rows="2"></textarea>
+                                <button id="hall-send-btn" class="send-btn" aria-label="发送">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="debate-topic-modal" class="modal-overlay">
+        <div class="modal-panel modal-panel-wide debate-topic-panel">
+            <div class="modal-top">
+                <h3>设定辩题</h3>
+                <button class="modal-close" id="close-debate-topic">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <p class="debate-topic-lead">两种方式任选其一：直接输入辩题，或分别填写正方和反方的观点。</p>
+            <div class="debate-topic-divider"><span>方式一：输入辩题</span></div>
+            <div class="field">
+                <textarea id="debate-topic-input" rows="3" placeholder="例如：AI 会在 10 年内取代大多数白领工作吗？"></textarea>
+            </div>
+            <div class="debate-topic-divider"><span>方式二：分别指定正反方观点</span></div>
+            <div class="debate-positions-grid">
+                <div class="field">
+                    <label class="debate-position-label debate-position-label--pro">正方观点</label>
+                    <input type="text" id="debate-pro-position" placeholder="正方支持的核心论点...">
+                </div>
+                <div class="field">
+                    <label class="debate-position-label debate-position-label--con">反方观点</label>
+                    <input type="text" id="debate-con-position" placeholder="反方支持的核心论点...">
+                </div>
+            </div>
+            <div class="debate-topic-examples">
+                <button type="button" class="debate-topic-chip" data-topic-suggestion="AI 会在 10 年内取代大多数白领工作吗？" data-pro="AI 技术正在快速迭代，大量重复性白领工作将被自动化取代" data-con="AI 只能辅助而非替代，人类的创造力、判断力和情感是AI无法替代的">AI 会取代白领吗？</button>
+                <button type="button" class="debate-topic-chip" data-topic-suggestion="创业公司应该优先追求增长，还是优先追求利润？" data-pro="没有增长就没有未来，先抢占市场份额才能生存" data-con="没有利润的烧钱不可持续，健康现金流才是立足之本">增长还是利润？</button>
+                <button type="button" class="debate-topic-chip" data-topic-suggestion="一个人最重要的品质，到底是理性还是勇气？" data-pro="理性让人在复杂世界中做出正确判断，避免冲动犯错" data-con="没有勇气迈出第一步，再好的理性也只是纸上谈兵">理性还是勇气？</button>
+            </div>
+            <div class="debate-topic-actions">
+                <button id="debate-topic-cancel" class="hero-btn">取消</button>
+                <button id="debate-topic-submit" class="btn-save">开始辩论</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="debate-teams-modal" class="modal-overlay">
+        <div class="modal-panel modal-panel-wide debate-teams-panel">
+            <div class="modal-top">
+                <h3>分配正反方</h3>
+                <button class="modal-close" id="close-debate-teams">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <p class="debate-teams-lead">将选中的角色分配到正方（支持）或反方（反对）。每方至少 1 人。</p>
+            <div class="debate-teams-layout">
+                <div class="debate-team-column debate-team-pro">
+                    <div class="debate-team-header">
+                        <span class="debate-team-badge debate-team-badge--pro">正方</span>
+                        <span class="debate-team-label">支持辩题</span>
+                    </div>
+                    <div id="debate-pro-slots" class="debate-team-slots"></div>
+                </div>
+                <div class="debate-team-column debate-team-con">
+                    <div class="debate-team-header">
+                        <span class="debate-team-badge debate-team-badge--con">反方</span>
+                        <span class="debate-team-label">反对辩题</span>
+                    </div>
+                    <div id="debate-con-slots" class="debate-team-slots"></div>
+                </div>
+            </div>
+            <div class="debate-teams-unassigned">
+                <div class="debate-teams-unassigned-header">
+                    <span class="rt-card-title">待分配</span>
+                    <button id="debate-auto-assign" class="debate-auto-btn">随机分配</button>
+                </div>
+                <div id="debate-unassigned" class="debate-team-unassigned-list"></div>
+            </div>
+            <div class="debate-topic-actions">
+                <button id="debate-teams-cancel" class="hero-btn">取消</button>
+                <button id="debate-teams-submit" class="btn-save" disabled>下一步</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="history-overlay" class="history-overlay"></div>
+    <div id="history-panel" class="history-panel">
+        <div class="history-header">
+            <h3>历史对话</h3>
+            <button class="modal-close" id="close-history">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+    </div>
+
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-panel">
+            <div class="modal-top">
+                <h3>接口配置</h3>
+                <button class="modal-close" id="close-settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <form id="settings-form" class="modal-form">
+                <div class="field">
+                    <label>接口类型</label>
+                    <select id="api-type">
+                        <option value="anthropic">Anthropic 克劳德</option>
+                        <option value="openai">OpenAI 兼容</option>
+                    </select>
+                </div>
+                <div class="field" id="base-url-group" style="display: none;">
+                    <label>接口地址</label>
+                    <input type="text" id="base-url" placeholder="填写你的接口地址">
+                    <span class="field-hint">OpenAI 兼容接口的基础地址</span>
+                </div>
+                <div class="field">
+                    <label>密钥</label>
+                    <input type="password" id="api-key" placeholder="填写你的 API Key">
+                    <span class="field-hint">密钥保存在本地和服务端</span>
+                </div>
+                <div class="field">
+                    <label>模型</label>
+                    <div class="model-input-row">
+                        <input type="text" id="model-name" placeholder="例如 gpt-4o">
+                        <button type="button" id="fetch-models-btn" class="btn-fetch">获取列表</button>
+                    </div>
+                    <span class="field-hint">手动输入或点击获取可用模型</span>
+                </div>
+                <div id="model-list-panel" class="model-list-panel" style="display:none;">
+                    <div class="model-list-header">
+                        <span>可用模型</span>
+                        <button type="button" id="close-model-list" class="model-list-close">&times;</button>
+                    </div>
+                    <div id="model-list-items" class="model-list-items"></div>
+                </div>
+                <button type="submit" class="btn-save">保存配置</button>
+                <div id="api-status" class="status-bar" style="display: none;">
+                    <span class="status-indicator"></span>
+                    <span id="status-text">配置已保存</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="modal-overlay">
+        <div class="modal-panel admin-panel">
+            <div class="modal-top">
+                <h3 class="modal-title">管理面板</h3>
+                <button id="close-admin" class="modal-close">&times;</button>
+            </div>
+            <div id="admin-settings" class="admin-settings"></div>
+            <h4 class="admin-section-title">人物管理</h4>
+            <div id="admin-char-list" class="admin-user-list">
+                <div class="admin-loading">加载中...</div>
+            </div>
+            <h4 class="admin-section-title">用户管理</h4>
+            <div id="admin-user-list" class="admin-user-list">
+                <div class="admin-loading">加载中...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="distill-modal" class="modal-overlay">
+        <div class="modal-panel distill-panel">
+            <div class="modal-top">
+                <h3>蒸馏人物</h3>
+                <button class="modal-close" id="close-distill">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div id="distill-input-area" class="distill-input-area">
+                <input type="text" id="distill-query" placeholder="输入人名，例如：芒格、纳瓦尔..." autocomplete="off">
+                <button id="distill-start-btn" class="btn-save">开始蒸馏</button>
+                <button id="distill-cancel-btn" class="btn-cancel" style="display:none;">取消蒸馏</button>
+            </div>
+            <div id="distill-status" class="distill-status" style="display:none;"></div>
+            <div id="distill-progress" class="distill-progress" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script src="/static/vendor/marked.min.js"></script>
+    <script src="/static/js/app.js?v=20260507d"></script>
+</body>
+</html>
