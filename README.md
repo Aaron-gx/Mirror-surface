@@ -14,17 +14,17 @@
 
 ### 首页
 
-![首页](./首页.png)
+![首页](./assets/screenshots/首页.png)
 
 ### 单人对话
 
-![单人对话](./单人对话.png)
+![单人对话](./assets/screenshots/单人对话.png)
 
 ### 辩论模式
 
-![辩论模式 1](./辩论1.png)
+![辩论模式 1](./assets/screenshots/辩论1.png)
 
-![辩论模式 2](./辩论2.png)
+![辩论模式 2](./assets/screenshots/辩论2.png)
 
 ## 功能
 
